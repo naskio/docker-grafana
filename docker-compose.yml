@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  grafana:
+    restart: always
+    image: grafana/grafana:latest-ubuntu
+    container_name: grafana
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      LETSENCRYPT_HOST: ${VIRTUAL_HOST}
+      LETSENCRYPT_EMAIL: ${WEBMASTER_EMAIL}
+      VIRTUAL_PORT: 3000 # Grafana UI exposed from this port
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER} # only works the very first time you start Grafana
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD} # only works the very first time you start Grafana
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource"
+      #      GF_AUTH_DISABLE_LOGIN_FORM: true
+      #      GF_AUTH_ANONYMOUS_ENABLED: true
+      #      GF_AUTH_ANONYMOUS_ORG_NAME: 'Anonymous'
+      #      GF_AUTH_ANONYMOUS_ORG_ROLE: 'Admin'
+      #      GF_INSTALL_PLUGINS: "grafana-clock-panel 1.0.1,grafana-simple-json-datasource 1.3.5"
+      #      GF_INSTALL_IMAGE_RENDERER_PLUGIN: true
+    expose:
+      - "3000"
+    volumes:
+      - data:/var/lib/grafana
+      - logs:/var/log/grafana
+      - home:/usr/share/grafana
+      - ./grafana.ini:/etc/grafana/grafana.ini
+      - dashboards:/etc/grafana/dashboards
+      - plugins:/var/lib/grafana/plugins
+      - provisioning:/etc/grafana/provisioning
+    networks:
+      - auto-reverse-proxy-global-network
+      - mongodb_service-network # example with mongodb
+
+volumes:
+  data:
+
+networks:
+  auto-reverse-proxy-global-network:
+    external: true
+  mongodb_service-network:
+    external: true
