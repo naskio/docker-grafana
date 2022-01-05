@@ -12,7 +12,7 @@ services:
       VIRTUAL_PORT: 3000 # Grafana UI exposed from this port
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER} # only works the very first time you start Grafana
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD} # only works the very first time you start Grafana
-      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource"
+      GF_INSTALL_PLUGINS: ${GF_INSTALL_PLUGINS}
       #      GF_AUTH_DISABLE_LOGIN_FORM: true
       #      GF_AUTH_ANONYMOUS_ENABLED: true
       #      GF_AUTH_ANONYMOUS_ORG_NAME: 'Anonymous'
